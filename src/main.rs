@@ -121,7 +121,7 @@ fn new_client() -> Client {
 
 fn extract_zoom_link(txt: String) -> Option<String> {
     lazy_static! {
-        static ref RE: Regex = Regex::new(r"(https?://(.*?zoom\.us)/j/([0-9]+))(?:\?pwd=(\w+))?").unwrap();
+        static ref RE: Regex = Regex::new(r"(https?://([a-z0-9.\-]*?zoom\.us)/j/([0-9]+))(?:\?pwd=(\w+))?").unwrap();
     }
 
     let n = RE.captures(txt.as_str()).iter().next().map(|c|
