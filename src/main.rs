@@ -34,8 +34,8 @@ use oauth2::read_application_secret;
 use oauth2::Token;
 use regex::Regex;
 use time::Duration;
+use hyper_native_tls::NativeTlsClient;
 
-#[macro_use]
 extern crate serde_json;
 
 fn main() {
@@ -116,7 +116,7 @@ fn read_secret(path: &Path) -> io::Result<ConsoleApplicationSecret> {
 }
 
 fn new_client() -> Client {
-    return Client::with_connector(HttpsConnector::new(hyper_rustls::TlsClient::new()));
+    return Client::with_connector(HttpsConnector::new(NativeTlsClient::new().expect("TODO")));
 }
 
 fn extract_zoom_link(txt: String) -> Option<String> {
@@ -179,7 +179,7 @@ fn get_verification_url(secret: ConsoleApplicationSecret, token_file: &String) -
     return urdel;
 }
 
-fn verify_code(secret: ConsoleApplicationSecret, token_file: &String, verification_code: &String) -> Result<Token, Box<Error>> {
+fn verify_code(secret: ConsoleApplicationSecret, token_file: &String, verification_code: &String) -> Result<Token, Box<dyn Error>> {
     let delegate = UserProvidedCodeAuthenticatorDelegate {
         code : verification_code.clone()
     };
